@@ -5,11 +5,12 @@
         <title>Heading movement</title>
     </head>
     <body>
+        <h1 id="StopGo">Press here to stop or continue</h1>
         <h1 id="heading">Look at the heading!</h1>
         <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
         <script>
             var leftOffset=0;
-            var topOffset=0;
+            var topOffset=100;
             var headMovefunc= function()
             {
                 $("#heading").offset({left:leftOffset,top:topOffset});
@@ -17,12 +18,27 @@
                 if(leftOffset==200){
                     topOffset+=10;    // jump to a new line;
                     leftOffset=0;
-                    if(topOffset==100){
+                    if(topOffset==200){
                         clearInterval(intervalID); // the end of the moving process;
+                        alert("The heading finishes moving!");
                     }
                 }
             }
-            var intervalID= setInterval(headMovefunc,100); // set an 1000 milli-second interval;
+
+            var bGoodToGo= true;
+
+            var pressControlFunc= function(event)
+            { 
+                if(bGoodToGo==false){ // currently, the heading is moving;
+                                      // press the string to stop the movement;
+                    clearInterval(intervalID);
+                    bGoodToGo= true;  // the heading now stops, ready to move;
+                }else{                // currently, the heading is stopped;
+                    intervalID= setInterval(headMovefunc,100); // set an 1000 milli-second interval;
+                    bGoodToGo= false;  // the heading now is moving, ready to be stopped;
+                }
+            }
+            $("#StopGo").click(pressControlFunc);
         </script>
     </body>
 </html>
